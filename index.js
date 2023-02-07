@@ -7,33 +7,17 @@ const client = new Client({
         GatewayIntentBits.MessageContent
     ]
 });
-const config = require(`${process.cwd()}/config.json`);
+const config = require(`${process.cwd()}/config.json`);/////CARPETA CONFIG DONDE VA ANDAR TU PREFIX,TOKEN,COLOR,MONGODB
 const fs = require('fs');
 require('colors');
-
+/////////READY ENVIA UN MENSAJE POR LA CONSOLA PARA VER SI TU BOT ESTA ONLINE/////
 client.on('ready', () => {
     console.log('¡Bot encendido!'.green)
 
 })
-
-const {  ActivityType  } = require("discord.js");
-// LunaBot Presence,
-  const activities = [
-        { name: `👑| Creador: Poke_YT`, type: ActivityType.Watching },
-        { name: `🎮| bl!help`, type: ActivityType.Playing }
-    ];
-    const status = [
-        'online'
-    ];
-    let s = 0;
-    setInterval(() => {
-        if(s >= activities.length) s = 0
-        client.user.setStatus(status[s])
-        s++;
-    }, 30000);
-
+//////EL BOT SE VA ALOGEAR CON EL TOKEN DEL BOT QUE VA ANDAR EN CONFIG.JSON/////
 client.login(config.token)
-
+///////PREFIX EN CONDIG.JSON ES EN DONDE ESTA TU PREFIX//////
 client.on('messageCreate', async (message) => {
     if(message.author.bot || !message.guild || message.channel.type === 'dm') return;
 
@@ -51,14 +35,14 @@ client.on('messageCreate', async (message) => {
         cmd.run(client, message, args, prefix);
     }
 })
-
+////////CARPETA COMANDOS DONDE PODRAS CREAR TUS COMANDOS/////
 client.commands = new Collection();
 
 fs.readdirSync('./commands').forEach((dir) => {
     const commands = fs.readdirSync(`./commands/${dir}/`).filter((file) => file.endsWith('.js'));
     for (let file of commands) {
         let command = require(`./commands/${dir}/${file}`);
-        console.log(`Comandos - ${file} cargado`.yellow)
+        console.log(`Comandos - ${file} cargado`.yellow)//////ENVIA UN MENSAJE ALA CONSOLA CUANTOS COMANDOS CARGARON
         client.commands.set(command.name, command);
     }
 });
